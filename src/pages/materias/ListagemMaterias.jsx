@@ -8,43 +8,35 @@ import { Box } from "@mui/system";
 import { StyledTableCell, StyledTableRow } from "../../components/styles";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_URL } from "../../constants";
+import { API_URL_MAT } from "../../constants";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button } from "@mui/material";
 import Swal from "sweetalert2";
 
-const AlunosListagem = () => {
-  const [alunos, setAlunos] = useState([]);
+const ListagemMaterias = () => {
+  const [materias, setMaterias] = useState([]);
 
   useEffect(() => {
-    getAlunos(); //sempre que entrarna aplica;'ao vai executar o getAlunos
+    getMaterias();
   }, []);
 
-  const getAlunos = () => {
-    axios.get(API_URL).then((response) => {
-      //O getAlunos carrega todos os alunos no inicio de cada execu;'ao
-      setAlunos(response.data);
+  const getMaterias = () => {
+    axios.get(API_URL_MAT).then((response) => {
+      setMaterias(response.data);
     });
   };
 
-  const deletarAluno = (aluno) => {
+  const deletarMaterias = (materia) => {
     axios
-      .delete(API_URL, { data: aluno })
+      .delete(API_URL_MAT, { data: materia })
       .then((response) => {
-        //para o delete precisa usar o data? aluno
+        //para o delete precisa usar o data? materia
         Swal.fire(
           response?.data?.message,
-          "Cadastro do Aluno Removido!",
+          "Mat[eria Removida do Cadastro!",
           "success"
         );
-        // getAlunos() usando aqui somente o get alunos no lugar de todo codigo abadixo ele tbm atualiza a pagina assim que deletado, porem menos performatico
-        const alunoIndex = alunos.findIndex( //para remover o aluno da pagina assim que clicar em delete
-          (elemento) => elemento.id === aluno.id
-        );
-        const newAlunos = [...alunos];
-        newAlunos.splice(alunoIndex, 1);
-        setAlunos(newAlunos);
-
+        getMaterias();
       })
       .catch((error) => {
         Swal.fire({
@@ -62,20 +54,23 @@ const AlunosListagem = () => {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="left">Nome</StyledTableCell>
-              <StyledTableCell align="left">Idade</StyledTableCell>
-              <StyledTableCell align="left">Cidade</StyledTableCell>
+              <StyledTableCell align="left">Materia</StyledTableCell>
+              <StyledTableCell align="left">Professor</StyledTableCell>
               <StyledTableCell align="left">Ações</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {alunos.map((aluno) => (
+            {materias.map((materia) => (
               <StyledTableRow>
-                <StyledTableCell align="left">{aluno.nome}</StyledTableCell>
-                <StyledTableCell align="left">{aluno.idade}</StyledTableCell>
-                <StyledTableCell align="left">{aluno.cidade}</StyledTableCell>
+                <StyledTableCell align="left">{materia.titulo}</StyledTableCell>
+                <StyledTableCell align="left">
+                  {materia.professor_nome}
+                </StyledTableCell>
                 <StyledTableCell align="center">
-                  <Button onClick={() => deletarAluno(aluno)} variant="text">
+                  <Button
+                    onClick={() => deletarMaterias(materia)}
+                    variant="text"
+                  >
                     <DeleteIcon />{" "}
                   </Button>
                 </StyledTableCell>
@@ -88,4 +83,4 @@ const AlunosListagem = () => {
   );
 };
 
-export default AlunosListagem;
+export default ListagemMaterias;

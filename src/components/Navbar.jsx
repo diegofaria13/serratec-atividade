@@ -13,18 +13,24 @@ export default function ButtonAppBar() {
       <AppBar position="static">
         <Toolbar>
           <IconButton
-            size="large"
+            size="medium"
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
+            sx={{ mr: 2}}
           >
           <Link to="/">
-            Home
+            Listagem De Alunos
           </Link>
           </IconButton>
           <Link to= "/cadastrar-alunos">
           <Button color="inherit">Cadastro de Alunos</Button>
+          </Link>
+          <Link to= "/listagem-materias">
+          <Button color="inherit">Lista de Matérias</Button>
+          </Link>
+          <Link to= "/cadastrar-materias">
+          <Button color="inherit">Cadastro de Matérias</Button>
           </Link>
         </Toolbar>
       </AppBar>

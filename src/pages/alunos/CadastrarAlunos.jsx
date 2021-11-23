@@ -26,6 +26,13 @@ const CadastrarAlunos = () => {
           //MySwal.fire(<p>{response?.data?.message}</p>);
           limparCampos();
         }
+      }).catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error
+          //footer: '<a href="">Why do I have this issue?</a>'
+        })
       });
   };
 
@@ -41,7 +48,7 @@ const CadastrarAlunos = () => {
         label="Nome"
         variant="outlined"
         value={nome} //pra depois que cadastrar ele colocar valor vazio que vem da funcao liparcampos
-        onChange={(e) => setNome(e.target.value)}
+        onChange={(e) => setNome(e.target.value)} //o evento onchange altera os estados
       />
       <InputCadastro
         label="Idade"
