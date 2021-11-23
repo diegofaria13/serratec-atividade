@@ -1,20 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import {
-  Form,
-  InputCadastro,
-  ButtonCadastro,
-} from "../../components/Cadastros";
+import { useState } from "react";
+import { Form, InputCadastro, ButtonCadastro} from "../../components/Cadastros";
 import { API_URL } from "../../constants";
 import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 
 const CadastrarAlunos = () => {
   const [nome, setNome] = useState();
   const [idade, setIdade] = useState();
   const [cidade, setCidade] = useState();
-
-  const MySwal = withReactContent(Swal);
 
   const cadastrarAlunos = () => {
     axios
