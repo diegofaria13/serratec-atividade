@@ -1,4 +1,4 @@
-# Trabalho em grupo da matéria Desenvolvimento Web.
+# Trabalho em grupo da matéria Desenvolvimento Web (React).
 
 Projeto de um site para listar, adicionar e editar alunos e matérias.
 
