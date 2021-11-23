@@ -1,4 +1,10 @@
-#Trabalho em grupo da matéria Desenvolvimento Web.
+# Trabalho em grupo da matéria Desenvolvimento Web.
+## Grupo 3
+### Antônio Alves
+### Diego Faria
+### Higor Henrique Dos Santos
+### Núria Peçanha
+### Victor Hugo Oliveira
 
 # Getting Started with Create React App
 
