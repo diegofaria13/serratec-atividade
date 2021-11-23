@@ -1,4 +1,7 @@
 # Trabalho em grupo da matéria Desenvolvimento Web.
+
+Projeto de um site para listar, adicionar e editar alunos e matérias.
+
 ## Grupo 3
 ### Antônio Alves
 ### Diego Faria
