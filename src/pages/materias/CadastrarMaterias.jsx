@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { useParams } from "react-router";
 
 const CadastrarMaterias = () => {
-  const { id } = useParams();
+  const { id } = useParams(); //vai pegar o id como um parametro
   const valorInicial = id ? " " : null;
   const [titulo, setTitulo] = useState(valorInicial);
   const [professor_nome, setProfessor_nome] = useState(valorInicial);
