@@ -1,42 +1,99 @@
 import axios from "axios";
-import { useState } from "react";
-import { Form, InputCadastro, ButtonCadastro} from "../../components/Cadastros";
+import { useEffect, useState } from "react";
+import {
+  Form,
+  InputCadastro,
+  ButtonCadastro,
+} from "../../components/Cadastros";
 import { API_URL } from "../../constants";
 import Swal from "sweetalert2";
+import { useParams } from "react-router";
 
 const CadastrarAlunos = () => {
-  const [nome, setNome] = useState();
-  const [idade, setIdade] = useState();
-  const [cidade, setCidade] = useState();
+  const { id } = useParams(); //como o editar alunos esta enviando um id junto criar essa constante para pegar esse id
+  const valorInicial = id ? " " : null; //valor inciial [e para ver se tem algum valor.. se tiver coloca vazio para o placeholder nome, idade e cidade subir e nao fica por cima dos dados que vierem
+  const [nome, setNome] = useState(valorInicial);
+  const [idade, setIdade] = useState(valorInicial);
+  const [cidade, setCidade] = useState(valorInicial);
 
-  const cadastrarAlunos = () => {
-    axios
-      .post(API_URL, {
-        nome,
-        idade,
-        cidade,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          Swal.fire(
-            response?.data?.message,
-            'Cadastro Realizado!',
-            'success'
-          );
-          //MySwal.fire(<p>{response?.data?.message}</p>);
-          limparCampos();
+  useEffect((aluno) => {
+    //use effects esta aqui para quando o componente for criado ja chamar a funcao getalunos porem ela agora ao inves de criar campos vazios vai colocar os dados do aluno que foi solicitado.
+    getAlunos();
+  }, []);
+
+  const getAlunos = () => {
+    axios.get(API_URL).then((response) => {
+      response.data.forEach((aluno) => {
+        //para cada aluno solicitado
+        if (aluno.id === parseInt(id)) {
+          //confere se os ids sao iguais e coloca os dados do aluno solicitado
+          setNome(aluno.nome);
+          setIdade(aluno.idade);
+          setCidade(aluno.cidade);
         }
-      }).catch(error => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: error
-          //footer: '<a href="">Why do I have this issue?</a>'
-        })
       });
+    });
   };
 
-  const limparCampos = () => { //seta todos os estados para vazio novamente
+  const cadastrarAlunos = () => {
+    if (id) {
+      axios
+        .put(API_URL, {
+          id,
+          nome,
+          idade,
+          cidade
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            Swal.fire(
+              response?.data?.message,
+              "Edição Realizada!",
+              "success"
+            );
+            //MySwal.fire(<p>{response?.data?.message}</p>);
+            limparCampos();
+          }
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error,
+            //footer: '<a href="">Why do I have this issue?</a>'
+          });
+        });
+    } else {
+      axios
+        .post(API_URL, {
+          nome,
+          idade,
+          cidade
+        })
+        .then((response) => {
+          if (response.status === 201) {
+            Swal.fire(
+              response?.data?.message,
+              "Cadastro Realizado!",
+              "success"
+            );
+            //MySwal.fire(<p>{response?.data?.message}</p>);
+            limparCampos();
+          }
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error,
+            //footer: '<a href="">Why do I have this issue?</a>'
+          });
+        });
+    }
+  };
+
+  const limparCampos = () => {
+    //seta todos os estados para vazio novamente
     setNome("");
     setIdade("");
     setCidade("");
@@ -64,7 +121,7 @@ const CadastrarAlunos = () => {
       />
 
       <ButtonCadastro variant="contained" onClick={cadastrarAlunos}>
-        Cadastrar{" "}
+        {id ? "Editar" : "Cadastrar"}
       </ButtonCadastro>
     </Form>
   );

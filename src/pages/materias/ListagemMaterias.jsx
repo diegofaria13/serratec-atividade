@@ -10,10 +10,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL_MAT } from "../../constants";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Button } from "@mui/material";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const ListagemMaterias = () => {
+  const navigate = useNavigate();
   const [materias, setMaterias] = useState([]);
 
   useEffect(() => {
@@ -48,6 +51,10 @@ const ListagemMaterias = () => {
       });
   };
 
+  const editarMateria = (materia) => {
+    navigate(`/editar-materias/${materia.id}`); //aqui o navigate esta fazendo ser redirecionado para o mesmo endere;o do cadastrar alunos para reaproveitar a pagina ja que vai ser usado a mesma coisa, porem esta enviando junto um id
+  }
+
   return (
     <Box sx={{ marginTop: "25px" }}>
       <TableContainer component={Paper}>
@@ -67,6 +74,9 @@ const ListagemMaterias = () => {
                   {materia.professor_nome}
                 </StyledTableCell>
                 <StyledTableCell align="center">
+                <Button onClick={() => editarMateria(materia)} variant="text">
+                    <EditIcon />{" "}
+                  </Button>
                   <Button
                     onClick={() => deletarMaterias(materia)}
                     variant="text"

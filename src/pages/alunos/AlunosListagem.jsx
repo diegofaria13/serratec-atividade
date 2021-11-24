@@ -10,10 +10,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../constants";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Button } from "@mui/material";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const AlunosListagem = () => {
+  const navigate = useNavigate(); //para redirecionar para uma pagina ja existente
   const [alunos, setAlunos] = useState([]);
 
   useEffect(() => {
@@ -38,13 +41,13 @@ const AlunosListagem = () => {
           "success"
         );
         // getAlunos() usando aqui somente o get alunos no lugar de todo codigo abadixo ele tbm atualiza a pagina assim que deletado, porem menos performatico
-        const alunoIndex = alunos.findIndex( //para remover o aluno da pagina assim que clicar em delete
+        const alunoIndex = alunos.findIndex(
+          //para remover o aluno da pagina assim que clicar em delete
           (elemento) => elemento.id === aluno.id
         );
         const newAlunos = [...alunos];
         newAlunos.splice(alunoIndex, 1);
         setAlunos(newAlunos);
-
       })
       .catch((error) => {
         Swal.fire({
@@ -54,6 +57,10 @@ const AlunosListagem = () => {
           //footer: '<a href="">Why do I have this issue?</a>'
         });
       });
+  };
+
+  const editarAluno = (aluno) => {
+    navigate(`/editar-alunos/${aluno.id}`); //aqui o navigate esta fazendo ser redirecionado para o mesmo endere;o do cadastrar alunos para reaproveitar a pagina ja que vai ser usado a mesma coisa, porem esta enviando junto um id
   };
 
   return (
@@ -75,6 +82,9 @@ const AlunosListagem = () => {
                 <StyledTableCell align="left">{aluno.idade}</StyledTableCell>
                 <StyledTableCell align="left">{aluno.cidade}</StyledTableCell>
                 <StyledTableCell align="center">
+                  <Button onClick={() => editarAluno(aluno)} variant="text">
+                    <EditIcon />{" "}
+                  </Button>
                   <Button onClick={() => deletarAluno(aluno)} variant="text">
                     <DeleteIcon />{" "}
                   </Button>

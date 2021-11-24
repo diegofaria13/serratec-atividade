@@ -14,8 +14,10 @@ const Routes = () => {
     const routes = useRoutes([
       {path: "/", element: <AlunosListagem />},
       {path: "/cadastrar-alunos", element: <CadastrarAlunos />},
+      {path: "/editar-alunos/:id", element: <CadastrarAlunos />}, //aqui tem um :id para mostrar o id que sera recebido
       {path: "/listagem-materias", element: <ListagemMaterias />},
-      {path: "/cadastrar-materias", element: <CadastrarMaterias />}
+      {path: "/cadastrar-materias", element: <CadastrarMaterias />},
+      {path: "/editar-materias/:id", element: <CadastrarMaterias />}
     ])
 
     return routes;
