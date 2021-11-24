@@ -14,6 +14,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Button } from "@mui/material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import Lottie from 'react-lottie';
+import animationData from '../../lotties/8617-open-book.json';
 
 const ListagemMaterias = () => {
   const navigate = useNavigate();
@@ -52,12 +54,21 @@ const ListagemMaterias = () => {
   };
 
   const editarMateria = (materia) => {
-    navigate(`/editar-materias/${materia.id}`); //aqui o navigate esta fazendo ser redirecionado para o mesmo endere;o do cadastrar alunos para reaproveitar a pagina ja que vai ser usado a mesma coisa, porem esta enviando junto um id
+    navigate(`/editar-materias/${materia.id}`); //aqui eu passo a rota e mostra o id que sera selecionado. reaproveitando a rora que ja existe de cadastro
   }
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
 
   return (
     <Box sx={{ marginTop: "25px" }}>
-      <TableContainer component={Paper}>
+      { materias.length > 0 ? (<TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -88,7 +99,13 @@ const ListagemMaterias = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>): (
+        <Lottie 
+        options={defaultOptions}
+          height={400}
+          width={400}
+        />
+      )}
     </Box>
   );
 };
