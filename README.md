@@ -1,3 +1,14 @@
+# Trabalho em grupo da matéria Desenvolvimento Web (React).
+
+Projeto de um site para listar, adicionar e editar alunos e matérias.
+
+## Grupo 3
+### Antônio Alves
+### Diego Faria
+### Higor Henrique Dos Santos
+### Núria Peçanha
+### Victor Hugo Oliveira
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
