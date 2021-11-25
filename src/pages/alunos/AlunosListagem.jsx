@@ -86,8 +86,8 @@ const AlunosListagem = () => {
             <TableRow>
               <StyledTableCell align="left">Nome</StyledTableCell>
               <StyledTableCell align="left">Idade</StyledTableCell>
-              <StyledTableCell align="left">Cidade</StyledTableCell>
-              <StyledTableCell align="left">Ações</StyledTableCell>
+              <StyledTableCell align="center">Cidade</StyledTableCell>
+              <StyledTableCell align="center">Ações</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -95,7 +95,7 @@ const AlunosListagem = () => {
               <StyledTableRow>
                 <StyledTableCell align="left">{aluno.nome}</StyledTableCell>
                 <StyledTableCell align="left">{aluno.idade}</StyledTableCell>
-                <StyledTableCell align="left">{aluno.cidade}</StyledTableCell>
+                <StyledTableCell align="center">{aluno.cidade}</StyledTableCell>
                 <StyledTableCell align="center">
                   <Button onClick={() => editarAluno(aluno)} variant="text">
                     <EditIcon />{" "}
