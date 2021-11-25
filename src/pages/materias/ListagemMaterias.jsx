@@ -16,10 +16,13 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import Lottie from 'react-lottie';
 import animationData from '../../lotties/8617-open-book.json';
+import withReactContent from "sweetalert2-react-content";
 
 const ListagemMaterias = () => {
   const navigate = useNavigate();
   const [materias, setMaterias] = useState([]);
+
+const mySwal = withReactContent(Swal);
 
   useEffect(() => {
     getMaterias();
@@ -27,7 +30,9 @@ const ListagemMaterias = () => {
 
   const getMaterias = () => {
     axios.get(API_URL_MAT).then((response) => {
-      setMaterias(response.data);
+      setTimeout(() => {
+        setMaterias(response.data);
+      }, 1200)
     });
   };
 
@@ -36,18 +41,12 @@ const ListagemMaterias = () => {
       .delete(API_URL_MAT, { data: materia })
       .then((response) => {
         //para o delete precisa usar o data? materia
-        Swal.fire(
-          response?.data?.message,
-          "Mat[eria Removida do Cadastro!",
-          "success"
+        mySwal.fire(response?.data?.message,"Materia Removida do Cadastro!","success"
         );
         getMaterias();
       })
       .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error,
+        mySwal.fire({icon: "error",title: "Oops...",text: error,
           //footer: '<a href="">Why do I have this issue?</a>'
         });
       });

@@ -16,10 +16,12 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import Lottie from 'react-lottie';
 import animationData from '../../lotties/78259-loading.json';
+import withReactContent from "sweetalert2-react-content";
 
 const AlunosListagem = () => {
   const navigate = useNavigate(); //para redirecionar para uma pagina ja existente
   const [alunos, setAlunos] = useState([]);
+  const mySwal = withReactContent(Swal);
 
   useEffect(() => {
     getAlunos(); //sempre que entrarna aplica;'ao vai executar o getAlunos
@@ -27,8 +29,10 @@ const AlunosListagem = () => {
 
   const getAlunos = () => {
     axios.get(API_URL).then((response) => {
+      setTimeout(() => {
+        setAlunos(response.data);
+      }, 1200)
       //O getAlunos carrega todos os alunos no inicio de cada execu;'ao
-      setAlunos(response.data);
     });
   };
 
@@ -37,7 +41,7 @@ const AlunosListagem = () => {
       .delete(API_URL, { data: aluno })
       .then((response) => {
         //para o delete precisa usar o data? aluno
-        Swal.fire(
+        mySwal.fire(
           response?.data?.message,
           "Cadastro do Aluno Removido!",
           "success"
@@ -52,7 +56,7 @@ const AlunosListagem = () => {
         setAlunos(newAlunos);
       })
       .catch((error) => {
-        Swal.fire({
+        mySwal.fire({
           icon: "error",
           title: "Oops...",
           text: error,
