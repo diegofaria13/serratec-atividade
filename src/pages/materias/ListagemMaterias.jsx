@@ -73,7 +73,7 @@ const mySwal = withReactContent(Swal);
             <TableRow>
               <StyledTableCell align="left">Materia</StyledTableCell>
               <StyledTableCell align="left">Professor</StyledTableCell>
-              <StyledTableCell align="left">Ações</StyledTableCell>
+              <StyledTableCell align="center">Ações</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
