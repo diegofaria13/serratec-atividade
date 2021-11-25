@@ -22,7 +22,7 @@ const CadastrarMaterias = () => {
   const getMaterias = () => {
     axios.get(API_URL_MAT).then((response) => {
       response.data.forEach((materia) => {
-        if (materia.id === parseInt(id)) {
+        if (materia.id === id) {
           setTitulo(materia.titulo);
           setProfessor_nome(materia.professor_nome);
         }
