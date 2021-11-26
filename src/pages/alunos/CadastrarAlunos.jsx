@@ -9,6 +9,9 @@ import { API_URL } from "../../constants";
 import Swal from "sweetalert2";
 import { useParams } from "react-router";
 import AlunoContext from "../../context/aluno";
+import { Box } from "@mui/system";
+import Lottie from "react-lottie";
+import animationData from "../../lotties/78259-loading.json";
 
 const CadastrarAlunos = () => {
   const { alunos, setAlunos } = useContext(AlunoContext);
@@ -26,19 +29,7 @@ const CadastrarAlunos = () => {
 
   const getAlunos = () => {
     if (alunos.length > 0) {
-        alunos.forEach((aluno) => {
-          //para cada aluno solicitado
-          if (aluno.id === parseInt(id)) {
-            //confere se os ids sao iguais e coloca os dados do aluno solicitado
-            setNome(aluno.nome);
-            setIdade(aluno.idade);
-            setCidade(aluno.cidade);
-          }
-        });
-    } else {
-    axios.get(API_URL).then((response) => {
-      setAlunos(response.data);
-      response.data.forEach((aluno) => {
+      alunos.forEach((aluno) => {
         //para cada aluno solicitado
         if (aluno.id === parseInt(id)) {
           //confere se os ids sao iguais e coloca os dados do aluno solicitado
@@ -47,7 +38,19 @@ const CadastrarAlunos = () => {
           setCidade(aluno.cidade);
         }
       });
-    });
+    } else {
+      axios.get(API_URL).then((response) => {
+        setAlunos(response.data);
+        response.data.forEach((aluno) => {
+          //para cada aluno solicitado
+          if (aluno.id === parseInt(id)) {
+            //confere se os ids sao iguais e coloca os dados do aluno solicitado
+            setNome(aluno.nome);
+            setIdade(aluno.idade);
+            setCidade(aluno.cidade);
+          }
+        });
+      });
     }
   };
 
@@ -117,31 +120,46 @@ const CadastrarAlunos = () => {
     setCidade("");
   };
 
-  return (
-    <Form>
-      <InputCadastro
-        label="Nome"
-        variant="outlined"
-        value={nome} //pra depois que cadastrar ele colocar valor vazio que vem da funcao liparcampos
-        onChange={(e) => setNome(e.target.value)} //o evento onchange altera os estados
-      />
-      <InputCadastro
-        label="Idade"
-        variant="outlined"
-        value={idade}
-        onChange={(e) => setIdade(e.target.value)}
-      />
-      <InputCadastro
-        label="Cidade"
-        variant="outlined"
-        value={cidade}
-        onChange={(e) => setCidade(e.target.value)}
-      />
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
-      <ButtonCadastro variant="contained" onClick={cadastrarAlunos}>
-        {id ? "Editar" : "Cadastrar"}
-      </ButtonCadastro>
-    </Form>
+  return (
+    <Box sx={{ marginTop: "25px" }}>
+      {alunos.length > 0 ? (
+        <Form>
+          <InputCadastro
+            label="Nome"
+            variant="outlined"
+            value={nome} //pra depois que cadastrar ele colocar valor vazio que vem da funcao liparcampos
+            onChange={(e) => setNome(e.target.value)} //o evento onchange altera os estados
+          />
+          <InputCadastro
+            label="Idade"
+            variant="outlined"
+            value={idade}
+            onChange={(e) => setIdade(e.target.value)}
+          />
+          <InputCadastro
+            label="Cidade"
+            variant="outlined"
+            value={cidade}
+            onChange={(e) => setCidade(e.target.value)}
+          />
+
+          <ButtonCadastro variant="contained" onClick={cadastrarAlunos}>
+            {id ? "Editar" : "Cadastrar"}
+          </ButtonCadastro>
+        </Form>
+      ) : (
+        <Lottie options={defaultOptions} height={400} width={400} />
+      )}
+    </Box>
   );
 };
 

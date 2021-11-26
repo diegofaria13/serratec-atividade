@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Form,
   InputCadastro,
@@ -8,8 +8,14 @@ import {
 import { API_URL_MAT } from "../../constants";
 import Swal from "sweetalert2";
 import { useParams } from "react-router";
+import MateriaContext from "../../context/materia";
+import Lottie from "react-lottie";
+import animationData from "../../lotties/78259-loading.json";
+import { Box } from "@mui/system";
 
 const CadastrarMaterias = () => {
+  const { materias, setMaterias } = useContext(MateriaContext);
+
   const { id } = useParams(); //vai pegar o id como um parametro
   const valorInicial = id ? " " : null;
   const [titulo, setTitulo] = useState(valorInicial);
@@ -20,14 +26,28 @@ const CadastrarMaterias = () => {
   }, []);
 
   const getMaterias = () => {
-    axios.get(API_URL_MAT).then((response) => {
-      response.data.forEach((materia) => {
+    if (materias.length > 0) {
+      materias.forEach((materia) => {
+        //para cada aluno solicitado
         if (materia.id === id) {
+          //confere se os ids sao iguais e coloca os dados do materia solicitado
           setTitulo(materia.titulo);
           setProfessor_nome(materia.professor_nome);
         }
       });
-    });
+    } else {
+      axios.get(API_URL_MAT).then((response) => {
+        setMaterias(response.data);
+        response.data.forEach((materia) => {
+          //para cada aluno solicitado
+          if (materia.id === parseInt(id)) {
+            //confere se os ids sao iguais e coloca os dados do aluno solicitado
+            setTitulo(materia.titulo);
+            setProfessor_nome(materia.professor_nome);
+          }
+        });
+      });
+    }
   };
 
   const cadastrarMaterias = () => {
@@ -36,15 +56,14 @@ const CadastrarMaterias = () => {
         .put(API_URL_MAT, {
           id,
           titulo,
-          professor_nome
+          professor_nome,
         })
         .then((response) => {
           if (response.status === 200) {
-            Swal.fire(
-              response?.data?.message,
-              "Edição Realizada!",
-              "success"
-            );
+            axios.get(API_URL_MAT).then((response) => {
+              setMaterias(response.data);
+            });
+            Swal.fire(response?.data?.message, "Edição Realizada!", "success");
             //MySwal.fire(<p>{response?.data?.message}</p>);
             limparCampos();
           }
@@ -61,10 +80,13 @@ const CadastrarMaterias = () => {
       axios
         .post(API_URL_MAT, {
           titulo,
-          professor_nome
+          professor_nome,
         })
         .then((response) => {
           if (response.status === 201) {
+            axios.get(API_URL_MAT).then((response) => {
+              setMaterias(response.data);
+            });
             Swal.fire(
               response?.data?.message,
               "Cadastro Realizado!",
@@ -91,25 +113,40 @@ const CadastrarMaterias = () => {
     setProfessor_nome("");
   };
 
-  return (
-    <Form>
-      <InputCadastro
-        label="Materia"
-        variant="outlined"
-        value={titulo}
-        onChange={(e) => setTitulo(e.target.value)}
-      />
-      <InputCadastro
-        label="Professor"
-        variant="outlined"
-        value={professor_nome}
-        onChange={(e) => setProfessor_nome(e.target.value)}
-      />
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
-      <ButtonCadastro variant="contained" onClick={cadastrarMaterias}>
-        {id ? 'Editar' : 'Cadastrar'}
-      </ButtonCadastro>
-    </Form>
+  return (
+    <Box sx={{ marginTop: "25px" }}>
+      {materias.length > 0 ? (
+        <Form>
+          <InputCadastro
+            label="Materia"
+            variant="outlined"
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+          />
+          <InputCadastro
+            label="Professor"
+            variant="outlined"
+            value={professor_nome}
+            onChange={(e) => setProfessor_nome(e.target.value)}
+          />
+
+          <ButtonCadastro variant="contained" onClick={cadastrarMaterias}>
+            {id ? "Editar" : "Cadastrar"}
+          </ButtonCadastro>
+        </Form>
+      ) : (
+        <Lottie options={defaultOptions} height={400} width={400} />
+      )}
+    </Box>
   );
 };
 
