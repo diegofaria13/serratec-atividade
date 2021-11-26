@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Form,
   InputCadastro,
@@ -8,8 +8,11 @@ import {
 import { API_URL } from "../../constants";
 import Swal from "sweetalert2";
 import { useParams } from "react-router";
+import AlunoContext from "../../context/aluno";
 
 const CadastrarAlunos = () => {
+  const { alunos, setAlunos } = useContext(AlunoContext);
+
   const { id } = useParams(); //como o editar alunos esta enviando um id junto criar essa constante para pegar esse id
   const valorInicial = id ? " " : null; //valor inciial [e para ver se tem algum valor.. se tiver coloca vazio para o placeholder nome, idade e cidade subir e nao fica por cima dos dados que vierem
   const [nome, setNome] = useState(valorInicial);
@@ -22,7 +25,19 @@ const CadastrarAlunos = () => {
   }, []);
 
   const getAlunos = () => {
+    if (alunos.length > 0) {
+        alunos.forEach((aluno) => {
+          //para cada aluno solicitado
+          if (aluno.id === parseInt(id)) {
+            //confere se os ids sao iguais e coloca os dados do aluno solicitado
+            setNome(aluno.nome);
+            setIdade(aluno.idade);
+            setCidade(aluno.cidade);
+          }
+        });
+    } else {
     axios.get(API_URL).then((response) => {
+      setAlunos(response.data);
       response.data.forEach((aluno) => {
         //para cada aluno solicitado
         if (aluno.id === parseInt(id)) {
@@ -33,6 +48,7 @@ const CadastrarAlunos = () => {
         }
       });
     });
+    }
   };
 
   const cadastrarAlunos = () => {
@@ -42,15 +58,14 @@ const CadastrarAlunos = () => {
           id,
           nome,
           idade,
-          cidade
+          cidade,
         })
         .then((response) => {
           if (response.status === 200) {
-            Swal.fire(
-              response?.data?.message,
-              "Edição Realizada!",
-              "success"
-            );
+            axios.get(API_URL).then((response) => {
+              setAlunos(response.data);
+            });
+            Swal.fire(response?.data?.message, "Edição Realizada!", "success");
             //MySwal.fire(<p>{response?.data?.message}</p>);
             limparCampos();
           }
@@ -68,10 +83,13 @@ const CadastrarAlunos = () => {
         .post(API_URL, {
           nome,
           idade,
-          cidade
+          cidade,
         })
         .then((response) => {
           if (response.status === 201) {
+            axios.get(API_URL).then((response) => {
+              setAlunos(response.data);
+            });
             Swal.fire(
               response?.data?.message,
               "Cadastro Realizado!",

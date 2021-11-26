@@ -6,7 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
 import { Box } from "@mui/system";
 import { StyledTableCell, StyledTableRow } from "../../components/styles";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../constants";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,15 +17,18 @@ import { useNavigate } from "react-router";
 import Lottie from 'react-lottie';
 import animationData from '../../lotties/78259-loading.json';
 import withReactContent from "sweetalert2-react-content";
+import AlunoContext from "../../context/aluno";
 
 const AlunosListagem = () => {
   const navigate = useNavigate(); //para redirecionar para uma pagina ja existente
-  const [alunos, setAlunos] = useState([]);
+  const { alunos, setAlunos } = useContext(AlunoContext);
   const mySwal = withReactContent(Swal);
 
   useEffect(() => {
-    getAlunos(); //sempre que entrarna aplica;'ao vai executar o getAlunos
-  }, []);
+    if(alunos.length <= 0){
+      getAlunos(); 
+    }
+  }, []); //sempre que iniciar vazio ao entrar ou recarregar a aplicação vai executar o getAlunos
 
   const getAlunos = () => {
     axios.get(API_URL).then((response) => {
