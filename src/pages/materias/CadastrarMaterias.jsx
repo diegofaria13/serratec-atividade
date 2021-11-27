@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { useParams } from "react-router";
 import MateriaContext from "../../context/materia";
 import Lottie from "react-lottie";
-import animationData from "../../lotties/78259-loading.json";
+import animationData from "../../lotties/8617-open-book.json";
 import { Box } from "@mui/system";
 
 const CadastrarMaterias = () => {
